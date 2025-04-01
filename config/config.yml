@@ -1,0 +1,11 @@
+app:
+  name: gin-second-fish
+  port: 8080
+
+front:
+  url: http://localhost:5173
+
+database:
+  dsn: root:1234@tcp(127.0.0.1:3306)/gin_second_fish?parseTime=True
+  MaxIdleConns: 10
+  MaxOpenConns: 100
