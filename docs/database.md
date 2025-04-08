@@ -5,6 +5,7 @@
 ### users
 
 - id: int, primary key, auto increment
+- nickname: string, not null
 - username: string, unique, not null
 - password: string, not null
 - email: string, unique, not null

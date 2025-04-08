@@ -4,7 +4,6 @@ import (
 	"gin-second-fish/config"
 	"gin-second-fish/controllers"
 	"gin-second-fish/docs"
-	"gin-second-fish/middlewares"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -46,9 +45,12 @@ func SetupRouter() *gin.Engine {
 			eg.GET("/hello", controllers.Hello)
 		}
 		need_auth := v1.Group("/need_auth")
-		need_auth.Use(middlewares.AuthMiddleWare())
+		// need_auth.Use(middlewares.AuthMiddleWare())
 		{
 			// apis which need auth
+			need_auth.GET("/user", controllers.GetUsers)
+			need_auth.GET("/user/:id", controllers.GetUserById)
+			need_auth.POST("/user", controllers.InsertUser)
 		}
 	}
 

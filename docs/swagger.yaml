@@ -16,4 +16,75 @@ paths:
       summary: ping example
       tags:
       - example
+  /need_auth/user:
+    get:
+      consumes:
+      - application/json
+      description: get all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: get all users
+      tags:
+      - example
+    post:
+      consumes:
+      - application/json
+      description: insert user
+      parameters:
+      - description: 用户名
+        in: formData
+        name: username
+        required: true
+        type: string
+      - description: 密码
+        in: formData
+        name: password
+        required: true
+        type: string
+      - description: 昵称
+        in: formData
+        name: nickname
+        type: string
+      - description: 电子邮箱
+        in: formData
+        name: email
+        type: string
+      - description: 电话号码
+        in: formData
+        name: phone
+        type: string
+      - description: 头像URL
+        in: formData
+        name: avatar
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: insert user
+      tags:
+      - example
+  /need_auth/user/:id:
+    get:
+      consumes:
+      - application/json
+      description: get user by id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: get user by id
+      tags:
+      - example
 swagger: "2.0"
