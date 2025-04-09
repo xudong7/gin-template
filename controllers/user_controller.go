@@ -77,3 +77,69 @@ func InsertUser(ctx *gin.Context) {
 
 	ctx.JSON(200, helpers.FormatUserForResponse(user))
 }
+
+func UpdateUser(ctx *gin.Context) {
+	id := ctx.Param("id")
+
+	existingUser, err := helpers.SelectUserByIdString(id)
+	if err != nil {
+		ctx.JSON(404, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	var updateData struct {
+		Nickname string `json:"nickname"`
+		Email    string `json:"email"`
+		Phone    string `json:"phone"`
+		Avatar   string `json:"avatar"`
+		Password string `json:"password"`
+	}
+
+	if err := ctx.ShouldBindJSON(&updateData); err != nil {
+		ctx.JSON(400, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	if updateData.Nickname != "" {
+		existingUser.Nickname = updateData.Nickname
+	}
+
+	if updateData.Email != "" {
+		existingUser.Email = updateData.Email
+	}
+
+	if updateData.Phone != "" {
+		existingUser.Phone = updateData.Phone
+	}
+
+	if updateData.Avatar != "" {
+		existingUser.Avatar = updateData.Avatar
+	}
+
+	if updateData.Password != "" {
+		hashedPassword, err := utils.HashPassword(updateData.Password)
+		if err != nil {
+			ctx.JSON(500, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+		existingUser.Password = hashedPassword
+	}
+
+	if err := global.Db.Save(&existingUser).Error; err != nil {
+		ctx.JSON(500, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(200, gin.H{
+		"message": "update user",
+		"user":    helpers.FormatUserForResponse(existingUser),
+	})
+}

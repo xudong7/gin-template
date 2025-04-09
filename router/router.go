@@ -51,6 +51,7 @@ func SetupRouter() *gin.Engine {
 			need_auth.GET("/user", controllers.GetUsers)
 			need_auth.GET("/user/:id", controllers.GetUserById)
 			need_auth.POST("/user", controllers.InsertUser)
+			need_auth.PUT("/user/:id", controllers.UpdateUser)
 		}
 	}
 

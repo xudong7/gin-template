@@ -68,14 +68,14 @@ func FormatUsersForResponse(users []models.User) []gin.H {
 
 	for _, user := range users {
 		formattedUsers = append(formattedUsers, gin.H{
-			"id":        user.ID,
-			"nickname":  user.Nickname,
-			"username":  user.Username,
-			"email":     user.Email,
-			"phone":     user.Phone,
-			"avatar":    user.Avatar,
-			"create_at": user.CreateAt,
-			"update_at": user.UpdateAt,
+			"id":       user.ID,
+			"nickname": user.Nickname,
+			"username": user.Username,
+			"email":    user.Email,
+			"phone":    user.Phone,
+			"avatar":   user.Avatar,
+			// "create_at": user.CreateAt,
+			// "update_at": user.UpdateAt,
 		})
 	}
 
@@ -84,13 +84,13 @@ func FormatUsersForResponse(users []models.User) []gin.H {
 
 func FormatUserForResponse(user models.User) gin.H {
 	return gin.H{
-		"id":        user.ID,
-		"nickname":  user.Nickname,
-		"username":  user.Username,
-		"email":     user.Email,
-		"phone":     user.Phone,
-		"avatar":    user.Avatar,
-		"create_at": user.CreateAt,
-		"update_at": user.UpdateAt,
+		"id":       user.ID,
+		"nickname": user.Nickname,
+		"username": user.Username,
+		"email":    user.Email,
+		"phone":    user.Phone,
+		"avatar":   user.Avatar,
+		// "create_at": user.CreateAt,
+		// "update_at": user.UpdateAt,
 	}
 }
