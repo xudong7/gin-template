@@ -6,7 +6,7 @@ type Item struct {
 	gorm.Model
 	SellerId       int    `json:"seller_id"`
 	CategoryId     int    `json:"category_id"`
-	Title          string `json:"title"`
+	Title          string `json:"title" binding:"required"`
 	Description    string `json:"description"`
 	Price          int    `json:"price"`
 	OriginalPrice  int    `json:"original_price"`
