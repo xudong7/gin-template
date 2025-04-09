@@ -1,8 +1,6 @@
 package middlewares
 
 import (
-	"net/http"
-
 	"gin-second-fish/utils"
 
 	"github.com/gin-gonic/gin"
@@ -15,7 +13,7 @@ func AuthMiddleWare() gin.HandlerFunc {
 
 		// If the token is empty, return a 401 Unauthorized response
 		if token == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{
+			c.JSON(401, gin.H{
 				"error": "Missing Authorization Header",
 			})
 			c.Abort()
@@ -26,7 +24,7 @@ func AuthMiddleWare() gin.HandlerFunc {
 		username, err := utils.ParseJWT(token)
 		// If not, return a 401 Unauthorized response
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{
+			c.JSON(401, gin.H{
 				"error": "Invalid Token",
 			})
 			c.Abort()

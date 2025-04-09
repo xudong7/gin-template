@@ -15,12 +15,6 @@ import (
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
 
-	// Load HTML templates from the "templates" directory
-	// r.LoadHTMLGlob("templates/*")
-
-	// Serve static files from the "static" directory
-	// r.Static("/static", "./static")
-
 	// CORS
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{config.AppConfig.Front.Url},
@@ -44,14 +38,13 @@ func SetupRouter() *gin.Engine {
 		{
 			eg.GET("/hello", controllers.Hello)
 		}
-		need_auth := v1.Group("/need_auth")
-		// need_auth.Use(middlewares.AuthMiddleWare())
+		user := v1.Group("/user")
+		// user.Use(middlewares.AuthMiddleWare())
 		{
-			// apis which need auth
-			need_auth.GET("/user", controllers.GetUsers)
-			need_auth.GET("/user/:id", controllers.GetUserById)
-			need_auth.POST("/user", controllers.InsertUser)
-			need_auth.PUT("/user/:id", controllers.UpdateUser)
+			user.GET("/", controllers.GetUsers)
+			user.GET("/:id", controllers.GetUserById)
+			user.POST("/", controllers.InsertUser)
+			user.PUT("/:id", controllers.UpdateUser)
 		}
 	}
 
