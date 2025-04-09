@@ -4,6 +4,7 @@ import (
 	"gin-second-fish/config"
 	"gin-second-fish/controllers"
 	"gin-second-fish/docs"
+	"gin-second-fish/middlewares"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -32,6 +33,7 @@ func SetupRouter() *gin.Engine {
 	docs.SwaggerInfo.BasePath = "/api/v1"
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
+	// v1 not use middleware
 	v1 := r.Group("/api/v1")
 	{
 		eg := v1.Group("/example")
@@ -39,13 +41,26 @@ func SetupRouter() *gin.Engine {
 			eg.GET("/hello", controllers.Hello)
 		}
 		user := v1.Group("/user")
-		// user.Use(middlewares.AuthMiddleWare())
 		{
 			user.GET("/", controllers.GetUsers)
 			user.GET("/:id", controllers.GetUserById)
 			user.POST("/", controllers.InsertUser)
 			user.PUT("/:id", controllers.UpdateUser)
 		}
+		item := v1.Group("/item")
+		{
+			item.GET("/", controllers.GetItems)
+			item.GET("/:id", controllers.GetItemById)
+			item.POST("/", controllers.InsertItem)
+			item.PUT("/:id", controllers.UpdateItem)
+		}
+	}
+
+	// v2 use middleware
+	v2 := r.Group("/api/v2")
+	v2.Use(middlewares.AuthMiddleWare())
+	{
+
 	}
 
 	return r

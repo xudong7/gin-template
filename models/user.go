@@ -10,7 +10,7 @@ type User struct {
 	Email       string `json:"email"`
 	Phone       string `json:"phone"`
 	Avatar      string `json:"avatar"`
-	CreditScore int    `json:"creditscore" gorm:"default:100"`
+	CreditScore int    `json:"credit_score" gorm:"default:100"`
 	Status      uint   `json:"status" gorm:"default:0"`
-	LastLoginAt string `json:"lastloginat"`
+	LastLoginAt string `json:"last_login_at"`
 }

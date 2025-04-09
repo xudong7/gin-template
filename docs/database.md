@@ -51,13 +51,13 @@
 - title: string, not null
 - description: text, not null
 - price: decimal(10, 2), not null
-- orginal_price: decimal(10, 2), default 0.00
+- original_price: decimal(10, 2), default 0.00
 - condition: uint, default 0 (0: new, 1: almost new, 2: slightly used, 3: used, 4: damaged) not null
 - location: string, not null
 - status: uint, default 0 (0: normal, 1: sold, 2: down, 3: checking, 4: invalid) not null
 - view_count: int, default 0
 - favorite_count: int, default 0
-- is_free_shipping: tinyint, default 0 (0: no, 1: yes)
+- is_free_shipping: int, default 0 (0: no, 1: yes)
 - shipping_fee: decimal(10, 2), default 0.00
 - created_at: datetime, default current timestamp
 - updated_at: datetime, default current timestamp on update current timestamp
