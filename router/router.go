@@ -58,6 +58,15 @@ func SetupRouter() *gin.Engine {
 			item.DELETE("/:id", controllers.DeleteItemById)
 			item.DELETE("/", controllers.DeleteItems)
 		}
+		order := v1.Group("/order")
+		{
+			order.GET("/", controllers.GetOrders)
+			order.GET("/:id", controllers.GetOrderById)
+			order.POST("/", controllers.InsertOrder)
+			order.PUT("/:id", controllers.UpdateOrder)
+			order.DELETE("/:id", controllers.DeleteOrderById)
+			order.DELETE("/", controllers.DeleteOrders)
+		}
 	}
 
 	// v2 use middleware

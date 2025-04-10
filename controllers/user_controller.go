@@ -10,8 +10,8 @@ import (
 )
 
 func GetUsers(ctx *gin.Context) {
-	users, err := helpers.SelectAllUsers()
-	if err != nil {
+	var users []models.User
+	if err := global.Db.Find(&users).Error; err != nil {
 		ctx.JSON(500, gin.H{
 			"error": "failed to get users",
 		})
@@ -27,8 +27,8 @@ func GetUsers(ctx *gin.Context) {
 func GetUserById(ctx *gin.Context) {
 	id := ctx.Param("id")
 
-	user, err := helpers.SelectUserByIdString(id)
-	if err != nil {
+	var user models.User
+	if err := global.Db.Where("id = ?", id).First(&user).Error; err != nil {
 		ctx.JSON(404, gin.H{
 			"error": "user not found",
 		})
@@ -50,11 +50,9 @@ func InsertUser(ctx *gin.Context) {
 		return
 	}
 
-	// Check if the username already exists
-	_, err := helpers.SelectUserByUsername(user.Username)
-	if err == nil {
-		ctx.JSON(400, gin.H{
-			"error": "username already exists",
+	if err := global.Db.AutoMigrate(&models.User{}); err != nil {
+		ctx.JSON(500, gin.H{
+			"error": "failed to auto migrate user",
 		})
 		return
 	}
@@ -147,17 +145,9 @@ func UpdateUser(ctx *gin.Context) {
 func DeleteUserById(ctx *gin.Context) {
 	id := ctx.Param("id")
 
-	existingUser, err := helpers.SelectUserByIdString(id)
-	if err != nil {
+	if err := global.Db.Where("id = ?", id).Delete(&models.User{}).Error; err != nil {
 		ctx.JSON(404, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-
-	if err := global.Db.Delete(&existingUser).Error; err != nil {
-		ctx.JSON(500, gin.H{
-			"error": err.Error(),
+			"error": "user not found",
 		})
 		return
 	}

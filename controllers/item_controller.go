@@ -9,8 +9,9 @@ import (
 )
 
 func GetItems(ctx *gin.Context) {
-	items, err := helpers.SelectAllItems()
-	if err != nil {
+	var items []models.Item
+
+	if err := global.Db.Find(&items).Error; err != nil {
 		ctx.JSON(500, gin.H{
 			"error": "failed to get items",
 		})
@@ -26,8 +27,8 @@ func GetItems(ctx *gin.Context) {
 func GetItemById(ctx *gin.Context) {
 	id := ctx.Param("id")
 
-	item, err := helpers.SelectItemByIdString(id)
-	if err != nil {
+	var item models.Item
+	if err := global.Db.Where("id = ?", id).First(&item).Error; err != nil {
 		ctx.JSON(404, gin.H{
 			"error": "item not found",
 		})
@@ -49,10 +50,9 @@ func InsertItem(ctx *gin.Context) {
 		return
 	}
 
-	_, err := helpers.SelectItemByIdString(string(rune(item.ID)))
-	if err == nil {
-		ctx.JSON(400, gin.H{
-			"error": "item already exists",
+	if err := global.Db.AutoMigrate(&models.Item{}); err != nil {
+		ctx.JSON(500, gin.H{
+			"error": "failed to auto migrate item",
 		})
 		return
 	}
@@ -104,15 +104,7 @@ func UpdateItem(ctx *gin.Context) {
 func DeleteItemById(ctx *gin.Context) {
 	id := ctx.Param("id")
 
-	exsitingItem, err := helpers.SelectItemByIdString(id)
-	if err != nil {
-		ctx.JSON(404, gin.H{
-			"error": "item not found",
-		})
-		return
-	}
-
-	if err := global.Db.Delete(&exsitingItem).Error; err != nil {
+	if err := global.Db.Where("id = ?", id).Delete(&models.Item{}).Error; err != nil {
 		ctx.JSON(500, gin.H{
 			"error": "failed to delete item",
 		})
@@ -132,6 +124,14 @@ func DeleteItems(ctx *gin.Context) {
 		})
 		return
 	}
+
+	// delete data from database need to add always true condition like "1=1"
+	// if err := global.Db.Unscoped().Where("1=1").Delete(&models.Item{}).Error; err != nil {
+	// 	ctx.JSON(500, gin.H{
+	// 		"error": "failed to permanently delete items",
+	// 	})
+	// 	return
+	// }
 
 	ctx.JSON(200, gin.H{
 		"message": "all items deleted successfully",

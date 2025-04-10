@@ -7,20 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SelectUserById(id int) (models.User, error) {
-	var user models.User
-
-	if err := global.Db.AutoMigrate(&models.User{}); err != nil {
-		return user, err
-	}
-
-	if err := global.Db.Where("id = ?", id).First(&user).Error; err != nil {
-		return user, err
-	}
-
-	return user, nil
-}
-
 func SelectUserByIdString(id string) (models.User, error) {
 	var user models.User
 
@@ -47,20 +33,6 @@ func SelectUserByUsername(username string) (models.User, error) {
 	}
 
 	return user, nil
-}
-
-func SelectAllUsers() ([]models.User, error) {
-	var users []models.User
-
-	if err := global.Db.AutoMigrate(&models.User{}); err != nil {
-		return nil, err
-	}
-
-	if err := global.Db.Find(&users).Error; err != nil {
-		return nil, err
-	}
-
-	return users, nil
 }
 
 func FormatUsersForResponse(users []models.User) []gin.H {
