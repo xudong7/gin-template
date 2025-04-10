@@ -100,3 +100,40 @@ func UpdateItem(ctx *gin.Context) {
 		"item":    item,
 	})
 }
+
+func DeleteItemById(ctx *gin.Context) {
+	id := ctx.Param("id")
+
+	exsitingItem, err := helpers.SelectItemByIdString(id)
+	if err != nil {
+		ctx.JSON(404, gin.H{
+			"error": "item not found",
+		})
+		return
+	}
+
+	if err := global.Db.Delete(&exsitingItem).Error; err != nil {
+		ctx.JSON(500, gin.H{
+			"error": "failed to delete item",
+		})
+		return
+	}
+
+	ctx.JSON(200, gin.H{
+		"message": "item deleted successfully",
+	})
+}
+
+func DeleteItems(ctx *gin.Context) {
+	// delete all items
+	if err := global.Db.Exec("DELETE FROM items").Error; err != nil {
+		ctx.JSON(500, gin.H{
+			"error": "failed to delete items",
+		})
+		return
+	}
+
+	ctx.JSON(200, gin.H{
+		"message": "all items deleted successfully",
+	})
+}

@@ -143,3 +143,40 @@ func UpdateUser(ctx *gin.Context) {
 		"user":    helpers.FormatUserForResponse(existingUser),
 	})
 }
+
+func DeleteUserById(ctx *gin.Context) {
+	id := ctx.Param("id")
+
+	existingUser, err := helpers.SelectUserByIdString(id)
+	if err != nil {
+		ctx.JSON(404, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	if err := global.Db.Delete(&existingUser).Error; err != nil {
+		ctx.JSON(500, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(200, gin.H{
+		"message": "delete user",
+	})
+}
+
+func DeleteUsers(ctx *gin.Context) {
+	// delete all users
+	if err := global.Db.Exec("DELETE FROM users").Error; err != nil {
+		ctx.JSON(500, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(200, gin.H{
+		"message": "delete all users",
+	})
+}

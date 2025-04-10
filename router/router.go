@@ -46,6 +46,8 @@ func SetupRouter() *gin.Engine {
 			user.GET("/:id", controllers.GetUserById)
 			user.POST("/", controllers.InsertUser)
 			user.PUT("/:id", controllers.UpdateUser)
+			user.DELETE("/:id", controllers.DeleteUserById)
+			user.DELETE("/", controllers.DeleteUsers)
 		}
 		item := v1.Group("/item")
 		{
@@ -53,6 +55,8 @@ func SetupRouter() *gin.Engine {
 			item.GET("/:id", controllers.GetItemById)
 			item.POST("/", controllers.InsertItem)
 			item.PUT("/:id", controllers.UpdateItem)
+			item.DELETE("/:id", controllers.DeleteItemById)
+			item.DELETE("/", controllers.DeleteItems)
 		}
 	}
 
