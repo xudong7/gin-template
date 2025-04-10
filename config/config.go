@@ -21,6 +21,13 @@ type Config struct {
 		MaxIdleConns int
 		MaxOpenConns int
 	}
+
+	Redis struct {
+		Host     string
+		Port     string
+		Password string
+		DB       int
+	}
 }
 
 var AppConfig *Config
@@ -41,4 +48,5 @@ func InitConfig() {
 	}
 
 	initDB()
+	initRedis()
 }

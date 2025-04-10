@@ -1,8 +1,12 @@
 package utils
 
 import (
+	"context"
+	"encoding/json"
 	"errors"
 	"time"
+
+	"gin-second-fish/global"
 
 	"github.com/golang-jwt/jwt"
 	"golang.org/x/crypto/bcrypt"
@@ -71,4 +75,30 @@ func ParseJWT(tokenString string) (string, error) {
 	}
 
 	return username, nil
+}
+
+// SetRedisCache 存储数据到Redis缓存
+func SetRedisCache(key string, value interface{}, expiration time.Duration) error {
+	ctx := context.Background()
+	data, err := json.Marshal(value)
+	if err != nil {
+		return err
+	}
+	return global.Rd.Set(ctx, key, data, expiration).Err()
+}
+
+// GetRedisCache 从Redis缓存获取数据
+func GetRedisCache(key string, dest interface{}) error {
+	ctx := context.Background()
+	data, err := global.Rd.Get(ctx, key).Bytes()
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, dest)
+}
+
+// DeleteRedisCache 删除Redis缓存
+func DeleteRedisCache(key string) error {
+	ctx := context.Background()
+	return global.Rd.Del(ctx, key).Err()
 }

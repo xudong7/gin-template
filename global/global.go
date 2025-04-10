@@ -1,7 +1,11 @@
 package global
 
-import "gorm.io/gorm"
+import (
+	"github.com/redis/go-redis/v9"
+	"gorm.io/gorm"
+)
 
 var (
 	Db *gorm.DB
+	Rd *redis.Client
 )
