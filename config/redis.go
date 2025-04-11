@@ -27,5 +27,5 @@ func initRedis() {
 		log.Println("Connected to Redis successfully")
 	}
 
-	global.Rd = client
+	global.Rdb = client
 }

@@ -42,10 +42,21 @@ func GetOrderById(ctx *gin.Context) {
 
 // bind user and item -> create order -> return order
 func InsertOrder(ctx *gin.Context) {
-	var order models.Order
-	if err := ctx.ShouldBindJSON(&order); err != nil {
+	var requestData map[string]interface{}
+	if err := ctx.ShouldBindJSON(&requestData); err != nil {
 		ctx.JSON(400, gin.H{
 			"error": err.Error(),
+		})
+		return
+	}
+
+	fields := []string{"buyer_id", "seller_id", "item_id", "address_id"}
+	helpers.ConvertStringIdsToInt(requestData, fields...)
+
+	var order models.Order
+	if err := helpers.MapToStruct(requestData, &order); err != nil {
+		ctx.JSON(400, gin.H{
+			"error": "data type error: " + err.Error(),
 		})
 		return
 	}
@@ -80,10 +91,20 @@ func UpdateOrder(ctx *gin.Context) {
 		return
 	}
 
-	var order models.Order
-	if err := ctx.ShouldBindJSON(&order); err != nil {
+	var requestData map[string]interface{}
+	if err := ctx.ShouldBindJSON(&requestData); err != nil {
 		ctx.JSON(400, gin.H{
 			"error": err.Error(),
+		})
+		return
+	}
+
+	fields := []string{"buyer_id", "seller_id", "item_id", "address_id"}
+	helpers.ConvertStringIdsToInt(requestData, fields...)
+	var order models.Order
+	if err := helpers.MapToStruct(requestData, &order); err != nil {
+		ctx.JSON(400, gin.H{
+			"error": "data type error: " + err.Error(),
 		})
 		return
 	}

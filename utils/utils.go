@@ -84,13 +84,13 @@ func SetRedisCache(key string, value interface{}, expiration time.Duration) erro
 	if err != nil {
 		return err
 	}
-	return global.Rd.Set(ctx, key, data, expiration).Err()
+	return global.Rdb.Set(ctx, key, data, expiration).Err()
 }
 
 // GetRedisCache 从Redis缓存获取数据
 func GetRedisCache(key string, dest interface{}) error {
 	ctx := context.Background()
-	data, err := global.Rd.Get(ctx, key).Bytes()
+	data, err := global.Rdb.Get(ctx, key).Bytes()
 	if err != nil {
 		return err
 	}
@@ -100,5 +100,5 @@ func GetRedisCache(key string, dest interface{}) error {
 // DeleteRedisCache 删除Redis缓存
 func DeleteRedisCache(key string) error {
 	ctx := context.Background()
-	return global.Rd.Del(ctx, key).Err()
+	return global.Rdb.Del(ctx, key).Err()
 }

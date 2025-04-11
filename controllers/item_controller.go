@@ -42,10 +42,20 @@ func GetItemById(ctx *gin.Context) {
 }
 
 func InsertItem(ctx *gin.Context) {
-	var item models.Item
-	if err := ctx.ShouldBindJSON(&item); err != nil {
+	var requestData map[string]interface{}
+	if err := ctx.ShouldBindJSON(&requestData); err != nil {
 		ctx.JSON(400, gin.H{
 			"error": err.Error(),
+		})
+		return
+	}
+
+	fields := []string{"seller_id", "category_id"}
+	helpers.ConvertStringIdsToInt(requestData, fields...)
+	var item models.Item
+	if err := helpers.MapToStruct(requestData, &item); err != nil {
+		ctx.JSON(400, gin.H{
+			"error": "data type error: " + err.Error(),
 		})
 		return
 	}
@@ -80,10 +90,20 @@ func UpdateItem(ctx *gin.Context) {
 		return
 	}
 
-	var item models.Item
-	if err := ctx.ShouldBindJSON(&item); err != nil {
+	var requestData map[string]interface{}
+	if err := ctx.ShouldBindJSON(&requestData); err != nil {
 		ctx.JSON(400, gin.H{
 			"error": err.Error(),
+		})
+		return
+	}
+
+	fields := []string{"seller_id", "category_id"}
+	helpers.ConvertStringIdsToInt(requestData, fields...)
+	var item models.Item
+	if err := helpers.MapToStruct(requestData, &item); err != nil {
+		ctx.JSON(400, gin.H{
+			"error": "data type error: " + err.Error(),
 		})
 		return
 	}
