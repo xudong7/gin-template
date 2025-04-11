@@ -67,6 +67,20 @@ func SetupRouter() *gin.Engine {
 			order.DELETE("/:id", controllers.DeleteOrderById)
 			order.DELETE("/", controllers.DeleteOrders)
 		}
+		category := v1.Group("/category")
+		{
+			category.GET("/", controllers.GetCategories)
+			category.GET("/:id", controllers.GetCategoryById)
+			category.POST("/", controllers.InsertCategory)
+			category.PUT("/:id", controllers.UpdateCategory)
+			category.DELETE("/:id", controllers.DeleteCategoryById)
+			category.DELETE("/", controllers.DeleteCategories)
+		}
+		upload := v1.Group("/upload")
+		{
+			upload.POST("/file", controllers.UploadFile)
+			upload.POST("/avatar/:userId", controllers.UploadAvatar)
+		}
 	}
 
 	// v2 use middleware

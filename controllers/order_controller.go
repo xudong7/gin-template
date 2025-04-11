@@ -50,8 +50,8 @@ func InsertOrder(ctx *gin.Context) {
 		return
 	}
 
-	fields := []string{"buyer_id", "seller_id", "item_id", "address_id"}
-	helpers.ConvertStringIdsToInt(requestData, fields...)
+	// fields := []string{"buyer_id", "seller_id", "item_id", "address_id"}
+	helpers.ConvertStringIdsToInt(requestData, global.OrderFields...)
 
 	var order models.Order
 	if err := helpers.MapToStruct(requestData, &order); err != nil {
@@ -99,8 +99,8 @@ func UpdateOrder(ctx *gin.Context) {
 		return
 	}
 
-	fields := []string{"buyer_id", "seller_id", "item_id", "address_id"}
-	helpers.ConvertStringIdsToInt(requestData, fields...)
+	// fields := []string{"buyer_id", "seller_id", "item_id", "address_id"}
+	helpers.ConvertStringIdsToInt(requestData, global.OrderFields...)
 	var order models.Order
 	if err := helpers.MapToStruct(requestData, &order); err != nil {
 		ctx.JSON(400, gin.H{

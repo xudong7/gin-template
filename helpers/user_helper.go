@@ -7,6 +7,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func UpdateUserAvatar(userId, fileUrl string) error {
+	// update user.avatar
+	user, err := SelectUserByIdString(userId)
+	if err != nil {
+		return err
+	}
+
+	if err := global.Db.Model(&user).Update("avatar", fileUrl).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func SelectUserByIdString(id string) (models.User, error) {
 	var user models.User
 
@@ -15,20 +29,6 @@ func SelectUserByIdString(id string) (models.User, error) {
 	}
 
 	if err := global.Db.Where("id = ?", id).First(&user).Error; err != nil {
-		return user, err
-	}
-
-	return user, nil
-}
-
-func SelectUserByUsername(username string) (models.User, error) {
-	var user models.User
-
-	if err := global.Db.AutoMigrate(&models.User{}); err != nil {
-		return user, err
-	}
-
-	if err := global.Db.Where("username = ?", username).First(&user).Error; err != nil {
 		return user, err
 	}
 
@@ -49,8 +49,8 @@ func FormatUsersForResponse(users []models.User) []gin.H {
 			"status":        user.Status,
 			"credit_score":  user.CreditScore,
 			"last_login_at": user.LastLoginAt,
-			// "create_at": user.CreateAt,
-			// "update_at": user.UpdateAt,
+			"created_at":    user.CreatedAt,
+			"updated_at":    user.UpdatedAt,
 		})
 	}
 
@@ -68,7 +68,7 @@ func FormatUserForResponse(user models.User) gin.H {
 		"status":        user.Status,
 		"credit_score":  user.CreditScore,
 		"last_login_at": user.LastLoginAt,
-		// "create_at": user.CreateAt,
-		// "update_at": user.UpdateAt,
+		"created_at":    user.CreatedAt,
+		"updated_at":    user.UpdatedAt,
 	}
 }

@@ -50,8 +50,8 @@ func InsertItem(ctx *gin.Context) {
 		return
 	}
 
-	fields := []string{"seller_id", "category_id"}
-	helpers.ConvertStringIdsToInt(requestData, fields...)
+	// fields := []string{"seller_id", "category_id"}
+	helpers.ConvertStringIdsToInt(requestData, global.ItemFields...)
 	var item models.Item
 	if err := helpers.MapToStruct(requestData, &item); err != nil {
 		ctx.JSON(400, gin.H{
@@ -82,7 +82,7 @@ func InsertItem(ctx *gin.Context) {
 
 func UpdateItem(ctx *gin.Context) {
 	id := ctx.Param("id")
-	exsitingItem, err := helpers.SelectItemByIdString(id)
+	existingItem, err := helpers.SelectItemByIdString(id)
 	if err != nil {
 		ctx.JSON(404, gin.H{
 			"error": "item not found",
@@ -98,8 +98,8 @@ func UpdateItem(ctx *gin.Context) {
 		return
 	}
 
-	fields := []string{"seller_id", "category_id"}
-	helpers.ConvertStringIdsToInt(requestData, fields...)
+	// fields := []string{"seller_id", "category_id"}
+	helpers.ConvertStringIdsToInt(requestData, global.ItemFields...)
 	var item models.Item
 	if err := helpers.MapToStruct(requestData, &item); err != nil {
 		ctx.JSON(400, gin.H{
@@ -108,7 +108,7 @@ func UpdateItem(ctx *gin.Context) {
 		return
 	}
 
-	if err := global.Db.Model(&exsitingItem).Updates(item).Error; err != nil {
+	if err := global.Db.Model(&existingItem).Updates(item).Error; err != nil {
 		ctx.JSON(500, gin.H{
 			"error": "failed to update item",
 		})

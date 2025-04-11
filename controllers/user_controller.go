@@ -87,35 +87,12 @@ func UpdateUser(ctx *gin.Context) {
 		return
 	}
 
-	var updateData struct {
-		Nickname string `json:"nickname"`
-		Email    string `json:"email"`
-		Phone    string `json:"phone"`
-		Avatar   string `json:"avatar"`
-		Password string `json:"password"`
-	}
-
+	var updateData models.User
 	if err := ctx.ShouldBindJSON(&updateData); err != nil {
 		ctx.JSON(400, gin.H{
 			"error": err.Error(),
 		})
 		return
-	}
-
-	if updateData.Nickname != "" {
-		existingUser.Nickname = updateData.Nickname
-	}
-
-	if updateData.Email != "" {
-		existingUser.Email = updateData.Email
-	}
-
-	if updateData.Phone != "" {
-		existingUser.Phone = updateData.Phone
-	}
-
-	if updateData.Avatar != "" {
-		existingUser.Avatar = updateData.Avatar
 	}
 
 	if updateData.Password != "" {
@@ -129,13 +106,12 @@ func UpdateUser(ctx *gin.Context) {
 		existingUser.Password = hashedPassword
 	}
 
-	if err := global.Db.Save(&existingUser).Error; err != nil {
+	if err := global.Db.Model(&existingUser).Updates(updateData).Error; err != nil {
 		ctx.JSON(500, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
-
 	ctx.JSON(200, gin.H{
 		"message": "update user",
 		"user":    helpers.FormatUserForResponse(existingUser),
@@ -144,14 +120,12 @@ func UpdateUser(ctx *gin.Context) {
 
 func DeleteUserById(ctx *gin.Context) {
 	id := ctx.Param("id")
-
 	if err := global.Db.Where("id = ?", id).Delete(&models.User{}).Error; err != nil {
 		ctx.JSON(404, gin.H{
 			"error": "user not found",
 		})
 		return
 	}
-
 	ctx.JSON(200, gin.H{
 		"message": "delete user",
 	})
@@ -165,7 +139,6 @@ func DeleteUsers(ctx *gin.Context) {
 		})
 		return
 	}
-
 	ctx.JSON(200, gin.H{
 		"message": "delete all users",
 	})

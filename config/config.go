@@ -28,6 +28,15 @@ type Config struct {
 		Password string
 		DB       int
 	}
+
+	OSS struct {
+		Endpoint        string
+		AccessKeyId     string
+		AccessKeySecret string
+		BucketName      string
+		URLPrefix       string
+		Directory       string
+	}
 }
 
 var AppConfig *Config
@@ -49,4 +58,9 @@ func InitConfig() {
 
 	initDB()
 	initRedis()
+	if err := InitOSS(); err != nil {
+		log.Printf("Failed to initialize OSS client: %v", err)
+	} else {
+		log.Println("OSS client initialized successfully")
+	}
 }

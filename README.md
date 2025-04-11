@@ -15,6 +15,7 @@ and then you can write your own project.
 - Viper
 - Mysql
 - Redis
+- Aliyun OSS
 - JWT
 - Swagger
 <!-- - Zap -->

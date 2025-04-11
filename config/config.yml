@@ -15,3 +15,11 @@ redis:
   port: 6379
   password: "123456"
   db: 0
+
+oss:
+  endpoint: "oss-cn-guangzhou.aliyuncs.com"
+  accessKeyId: "accessKeyId"
+  accessKeySecret: "accessKeySecret"
+  bucketName: "bucketName"
+  urlPrefix: "https://bucketName.oss-cn-guangzhou.aliyuncs.com/"
+  directory: "uploads/"
