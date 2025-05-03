@@ -21,3 +21,22 @@ func ToString(value interface{}) string {
 		return ""
 	}
 }
+
+func ToInt(value interface{}) int {
+	switch v := value.(type) {
+	case int:
+		return v
+	case uint:
+		return int(v)
+	case int64:
+		return int(v)
+	case float64:
+		return int(v)
+	case string:
+		var i int
+		fmt.Sscanf(v, "%d", &i)
+		return i
+	default:
+		return 0
+	}
+}
