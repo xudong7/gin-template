@@ -3,17 +3,7 @@ package utils
 import (
 	"context"
 	"gin-second-fish/global"
-	"time"
 )
-
-// set token to redis
-func SetToken(userId string, token string) error {
-	ctx := context.Background()
-	// set token to redis
-	key := global.RedisKeyPrefix + "user:" + userId + ":token"
-	expire := 24 * time.Hour
-	return global.Rdb.Set(ctx, key, token, expire).Err()
-}
 
 // check if user is in item favorite list
 func IsFavorite(userId string, itemId string) (bool, error) {

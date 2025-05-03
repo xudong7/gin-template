@@ -1,12 +1,23 @@
 package utils
 
 import (
+	"context"
 	"errors"
 	"gin-second-fish/global"
+	"time"
 
 	"github.com/golang-jwt/jwt"
 	"golang.org/x/crypto/bcrypt"
 )
+
+// set token to redis
+func SetToken(userId string, token string) error {
+	ctx := context.Background()
+	// set token to redis
+	key := global.RedisKeyPrefix + "user:" + userId + ":token"
+	expire := 24 * time.Hour
+	return global.Rdb.Set(ctx, key, token, expire).Err()
+}
 
 // HashPassword hashes the password using bcrypt
 func HashPassword(pwd string) (string, error) {

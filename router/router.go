@@ -93,7 +93,7 @@ func SetupRouter() *gin.Engine {
 		{
 			favorite.POST("/:user_id/:item_id", controllers.ToggleFavorite)
 			favorite.GET("/:user_id/:item_id", controllers.IsFavorite)
-			favorite.GET("/top", controllers.GetTopFavoriteItems)
+			favorite.GET("/top", controllers.GetTopFavoriteItems) // query: limit
 		}
 	}
 
