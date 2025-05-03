@@ -20,4 +20,7 @@ var (
 	// constants
 	JwtSecret     = []byte("secret")
 	JwtExpireTime = time.Now().Add(time.Hour * 72).Unix()
+
+	// redis key prefix
+	RedisKeyPrefix = "second-fish:"
 )

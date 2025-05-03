@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// update user avatar
 func UpdateUserAvatar(userId, fileUrl string) error {
 	// update user.avatar
 	user, err := SelectUserByIdString(userId)
@@ -21,20 +22,7 @@ func UpdateUserAvatar(userId, fileUrl string) error {
 	return nil
 }
 
-func SelectUserByIdString(id string) (models.User, error) {
-	var user models.User
-
-	if err := global.Db.AutoMigrate(&models.User{}); err != nil {
-		return user, err
-	}
-
-	if err := global.Db.Where("id = ?", id).First(&user).Error; err != nil {
-		return user, err
-	}
-
-	return user, nil
-}
-
+// format users data for response
 func FormatUsersForResponse(users []models.User) []gin.H {
 	var formattedUsers []gin.H
 
@@ -57,6 +45,7 @@ func FormatUsersForResponse(users []models.User) []gin.H {
 	return formattedUsers
 }
 
+// format single user data for response
 func FormatUserForResponse(user models.User) gin.H {
 	return gin.H{
 		"id":            user.ID,

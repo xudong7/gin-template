@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"gin-second-fish/global"
 	"gin-second-fish/models"
 	"gin-second-fish/utils"
@@ -33,7 +32,8 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
-	userId := fmt.Sprintf("%d", dbUser.ID)
+	// userId := fmt.Sprintf("%d", dbUser.ID)
+	userId := utils.ToString(dbUser.ID)
 
 	token, err := utils.GenerateJWT(user.Username)
 	if err != nil {
@@ -42,9 +42,8 @@ func Login(ctx *gin.Context) {
 		})
 		return
 	}
-	// set token to redis
-	key := "second-fish:" + userId + ":token"
-	if err := utils.SetToken(key, token); err != nil {
+
+	if err := utils.SetToken(userId, token); err != nil {
 		ctx.JSON(500, gin.H{
 			"error": "failed to set token to redis",
 		})

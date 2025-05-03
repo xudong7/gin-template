@@ -24,6 +24,7 @@ func ConvertToInt(idValue interface{}) int {
 	}
 }
 
+// convert string fields to int in a map
 func ConvertStringIdsToInt(data map[string]interface{}, idFields ...string) {
 	// if len(idFields) == 0 {
 	// 	idFields = []string{"id", "ID", "buyer_id", "seller_id", "item_id", "address_id"}

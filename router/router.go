@@ -34,7 +34,7 @@ func SetupRouter() *gin.Engine {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// auth check
-	auth := r.Group("/api/auth")
+	auth := r.Group("/api/v1/auth")
 	{
 		auth.POST("/login", controllers.Login)
 		auth.POST("/register", controllers.Register)
@@ -88,6 +88,11 @@ func SetupRouter() *gin.Engine {
 		{
 			upload.POST("/file", controllers.UploadFile)
 			upload.POST("/avatar/:userId", controllers.UploadAvatar)
+		}
+		favorite := v1.Group("/favorite")
+		{
+			favorite.POST("/:user_id/:item_id", controllers.ToggleFavorite)
+			favorite.GET("/:user_id/:item_id", controllers.IsFavorite)
 		}
 	}
 
