@@ -1,11 +1,7 @@
 package utils
 
 import (
-	"context"
-	"encoding/json"
 	"errors"
-	"time"
-
 	"gin-second-fish/global"
 
 	"github.com/golang-jwt/jwt"
@@ -26,10 +22,10 @@ func HashPassword(pwd string) (string, error) {
 func GenerateJWT(username string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"username": username,
-		"exp":      time.Now().Add(time.Hour * 72).Unix(), // 3 days
+		"exp":      global.JwtExpireTime,
 	})
 
-	signedToken, err := token.SignedString([]byte("secret"))
+	signedToken, err := token.SignedString(global.JwtSecret)
 	if err != nil {
 		return "", err
 	}
@@ -55,7 +51,7 @@ func ParseJWT(tokenString string) (string, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("unexpected signing method")
 		}
-		return []byte("secret"), nil
+		return global.JwtSecret, nil
 	})
 
 	if err != nil {
@@ -75,30 +71,4 @@ func ParseJWT(tokenString string) (string, error) {
 	}
 
 	return username, nil
-}
-
-// SetRedisCache 存储数据到Redis缓存
-func SetRedisCache(key string, value interface{}, expiration time.Duration) error {
-	ctx := context.Background()
-	data, err := json.Marshal(value)
-	if err != nil {
-		return err
-	}
-	return global.Rdb.Set(ctx, key, data, expiration).Err()
-}
-
-// GetRedisCache 从Redis缓存获取数据
-func GetRedisCache(key string, dest interface{}) error {
-	ctx := context.Background()
-	data, err := global.Rdb.Get(ctx, key).Bytes()
-	if err != nil {
-		return err
-	}
-	return json.Unmarshal(data, dest)
-}
-
-// DeleteRedisCache 删除Redis缓存
-func DeleteRedisCache(key string) error {
-	ctx := context.Background()
-	return global.Rdb.Del(ctx, key).Err()
 }
