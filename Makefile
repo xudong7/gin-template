@@ -2,12 +2,14 @@
 
 clean:
 	@rm -rf bin
+	@rm -rf logs
 	@go mod tidy
 
 build:
+	@rm -rf bin
 	@go build -o bin/gin-template ./cmd/server/main.go
 
-run: clean build
+run: build
 	@./bin/gin-template
 
 dev:
